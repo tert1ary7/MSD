@@ -1,0 +1,18 @@
+{
+  "pools": [
+    {
+      "id": "MATLAB_AERO",
+      "triad_group": "alpha_cluster",
+      "status": "nominal",
+      "utilization": 85,
+      "owner": "Aerospace"
+    },
+    {
+      "id": "AUTOCAD_ENG",
+      "triad_group": "beta_cluster",
+      "status": "critical",
+      "utilization": 100,
+      "owner": "Engineering"
+    }
+  ]
+}
