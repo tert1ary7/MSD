@@ -1,0 +1,135 @@
+:root {
+    /* MSD Noir Palette */
+    --bg-base: #050508;
+    --panel-bg: #0b0c10;
+    --text-muted: #4a5568;
+    
+    /* Telemetry States */
+    --state-nominal-dim: #0f291e;
+    --state-nominal-glow: #00ff66;
+    --state-amber: #ffaa00;
+    --state-critical: #ff003c;
+    --state-org-blue: #00e5ff;
+}
+
+body {
+    background-color: var(--bg-base);
+    color: var(--text-muted);
+    font-family: 'Courier New', Courier, monospace; /* Engineering terminal vibe */
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* No scrolling in a control room */
+}
+
+.msd-container {
+    width: 98vw;
+    height: 96vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--panel-bg);
+    border: 1px solid var(--text-muted);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Header */
+.system-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--text-muted);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.neon-green { color: var(--state-nominal-glow); text-shadow: 0 0 5px var(--state-nominal-glow); }
+.critical-text { color: var(--state-critical); animation: pulse-text 2s infinite; }
+
+/* Main Display Area */
+.main-display {
+    display: flex;
+    flex-grow: 1;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+/* Sidebar (Infrastructure) */
+.infrastructure-sidebar {
+    width: 150px;
+    border-right: 1px solid var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-right: 10px;
+    overflow-y: hidden;
+}
+.sidebar-title { font-size: 0.8rem; margin-bottom: 10px; color: var(--state-org-blue); }
+.server-node {
+    height: 12px;
+    background-color: var(--state-nominal-dim);
+    border: 1px solid #000;
+    transition: background-color 0.3s;
+}
+
+/* Hexagon Grid Math */
+.core-matrix {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.hex-row {
+    display: flex;
+    justify-content: center;
+    margin-top: -12px; /* Interlocking vertical overlap */
+}
+.hex-row:nth-child(even) {
+    margin-left: 44px; /* Interlocking horizontal offset */
+}
+.hex {
+    width: 40px;
+    height: 46px; /* 40 * 1.154 for proper proportions */
+    background-color: var(--state-nominal-dim);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    margin: 0 2px;
+    transition: all 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hex:hover { filter: brightness(1.5); cursor: crosshair; }
+
+/* Dynamic State Classes applied by JS */
+.state-nominal { background-color: var(--state-nominal-glow); box-shadow: 0 0 10px var(--state-nominal-glow); }
+.state-amber { background-color: var(--state-amber); }
+.state-critical { background-color: var(--state-critical); animation: strobe 0.5s infinite; }
+
+/* Bottom Flow */
+.budgetary-flow {
+    height: 100px;
+    border-top: 1px solid var(--text-muted);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.flow-title { font-size: 0.8rem; color: var(--state-org-blue); margin-bottom: 10px; }
+.flow-bars { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; justify-content: center;}
+.flow-track { width: 100%; background-color: #111; height: 12px; position: relative; }
+.flow-fill { height: 100%; background-color: var(--state-org-blue); transition: width 1s ease-in-out; }
+.flow-label { position: absolute; left: 5px; top: -1px; font-size: 10px; color: #000; font-weight: bold; }
+
+/* Animations */
+@keyframes strobe {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+@keyframes pulse-text {
+    0% { text-shadow: 0 0 2px var(--state-critical); }
+    50% { text-shadow: 0 0 15px var(--state-critical); }
+    100% { text-shadow: 0 0 2px var(--state-critical); }
+}
