@@ -1,6 +1,5 @@
 :root {
-    /* MSD Noir Palette */
-    --bg-base: #050508;
+    --bg-base: #020203;
     --panel-bg: #0b0c10;
     --text-muted: #4a5568;
     
@@ -9,133 +8,86 @@
     --state-nominal-glow: #00ff66;
     --state-amber: #ffaa00;
     --state-critical: #ff003c;
-    --state-org-blue: #00e5ff;
+    --state-offline: #111111;
 }
 
 body {
     background-color: var(--bg-base);
     color: var(--text-muted);
-    font-family: 'Courier New', Courier, monospace; /* Engineering terminal vibe */
+    font-family: 'Courier New', Courier, monospace;
     margin: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* No scrolling in a control room */
+    overflow: hidden;
 }
 
 .msd-container {
     width: 98vw;
-    height: 96vh;
+    height: 98vh;
     display: flex;
     flex-direction: column;
     background-color: var(--panel-bg);
-    border: 1px solid var(--text-muted);
+    border: 1px solid #1f2329;
     padding: 10px;
     box-sizing: border-box;
 }
 
-/* Header */
-.system-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-    border-bottom: 1px solid var(--text-muted);
-    font-weight: bold;
-    font-size: 1.2rem;
-}
+/* Header & Filter */
+.system-header { display: flex; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid var(--text-muted); font-weight: bold; }
 .neon-green { color: var(--state-nominal-glow); text-shadow: 0 0 5px var(--state-nominal-glow); }
 .critical-text { color: var(--state-critical); animation: pulse-text 2s infinite; }
+#asset-filter {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid var(--state-nominal-glow);
+    padding: 5px 15px;
+    font-family: 'Courier New', Courier, monospace;
+    width: 300px;
+    text-align: center;
+}
+#asset-filter:focus { outline: none; box-shadow: 0 0 10px var(--state-nominal-glow); }
 
-/* Main Display Area */
-.main-display {
-    display: flex;
-    flex-grow: 1;
-    margin: 10px 0;
-    overflow: hidden;
-}
+/* Main Display & Sidebar */
+.main-display { display: flex; flex-grow: 1; margin: 10px 0; overflow: hidden; }
+.infrastructure-sidebar { width: 120px; border-right: 1px solid var(--text-muted); display: flex; flex-direction: column; gap: 4px; padding-right: 10px; overflow-y: hidden; }
+.sidebar-title { font-size: 0.8rem; margin-bottom: 10px; color: var(--text-muted); }
+.server-node { height: 10px; background-color: var(--state-nominal-dim); border: 1px solid #000; transition: background-color 0.3s; }
 
-/* Sidebar (Infrastructure) */
-.infrastructure-sidebar {
-    width: 150px;
-    border-right: 1px solid var(--text-muted);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding-right: 10px;
-    overflow-y: hidden;
-}
-.sidebar-title { font-size: 0.8rem; margin-bottom: 10px; color: var(--state-org-blue); }
-.server-node {
-    height: 12px;
-    background-color: var(--state-nominal-dim);
-    border: 1px solid #000;
-    transition: background-color 0.3s;
-}
+/* The 3-Lane Topology Map */
+.core-matrix { flex-grow: 1; display: flex; flex-direction: column; }
+.dc-lane { flex-grow: 1; border-bottom: 1px dashed #1f2329; position: relative; display: flex; align-items: center; padding-left: 150px; overflow: hidden; }
+.dc-lane:last-child { border-bottom: none; }
+.dc-label { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: #333; font-weight: bold; writing-mode: vertical-rl; text-orientation: mixed; letter-spacing: 5px;}
 
-/* Hexagon Grid Math */
-.core-matrix {
-    flex-grow: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.hex-row {
-    display: flex;
-    justify-content: center;
-    margin-top: -12px; /* Interlocking vertical overlap */
-}
-.hex-row:nth-child(even) {
-    margin-left: 44px; /* Interlocking horizontal offset */
-}
+/* Hexagon Logic with Halos */
+.lane-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; width: 100%;}
+.hex-container { transition: all 0.2s ease; cursor: crosshair; }
 .hex {
-    width: 40px;
-    height: 46px; /* 40 * 1.154 for proper proportions */
+    width: 28px;
+    height: 32px;
     background-color: var(--state-nominal-dim);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    margin: 0 2px;
-    transition: all 0.5s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; justify-content: center; align-items: center;
+    transition: background-color 0.3s ease;
 }
-.hex:hover { filter: brightness(1.5); cursor: crosshair; }
 
-/* Dynamic State Classes applied by JS */
-.state-nominal { background-color: var(--state-nominal-glow); box-shadow: 0 0 10px var(--state-nominal-glow); }
+/* Interaction & States */
+.highlight-triad { filter: brightness(2) drop-shadow(0 0 10px white) !important; z-index: 10; transform: scale(1.1); }
+.dimmed { opacity: 0.1 !important; filter: grayscale(100%); }
+
+.state-nominal { background-color: var(--state-nominal-glow); }
 .state-amber { background-color: var(--state-amber); }
 .state-critical { background-color: var(--state-critical); animation: strobe 0.5s infinite; }
+.state-offline { background-color: var(--state-offline); }
 
-/* Bottom Flow */
-.budgetary-flow {
-    height: 100px;
-    border-top: 1px solid var(--text-muted);
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-}
-.flow-title { font-size: 0.8rem; color: var(--state-org-blue); margin-bottom: 10px; }
-.flow-bars { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; justify-content: center;}
-.flow-track { width: 100%; background-color: #111; height: 12px; position: relative; }
-.flow-fill { height: 100%; background-color: var(--state-org-blue); transition: width 1s ease-in-out; }
-.flow-label { position: absolute; left: 5px; top: -1px; font-size: 10px; color: #000; font-weight: bold; }
+/* Flow / Legend */
+.budgetary-flow { height: 60px; border-top: 1px solid var(--text-muted); padding: 10px; display: flex; flex-direction: column; }
+.flow-title { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; }
+.flow-bars { display: flex; gap: 20px; align-items: center; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px;}
+.legend-color { width: 15px; height: 15px; border-radius: 50%; }
 
-/* Animations */
-@keyframes strobe {
-    0% { opacity: 1; }
-    50% { opacity: 0.3; }
-    100% { opacity: 1; }
-}
-@keyframes pulse-text {
-    0% { text-shadow: 0 0 2px var(--state-critical); }
-    50% { text-shadow: 0 0 15px var(--state-critical); }
-    100% { text-shadow: 0 0 2px var(--state-critical); }
-}
-
-/* This creates a visual 'neighborhood' for every 3 hexes */
-.hex-row .hex:nth-child(3n) {
-    border-right: 2px solid var(--state-org-blue);
-    margin-right: 10px; /* Creates a physical gap between triads */
-}
+@keyframes strobe { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+@keyframes pulse-text { 0% { text-shadow: 0 0 2px var(--state-critical); } 50% { text-shadow: 0 0 15px var(--state-critical); } 100% { text-shadow: 0 0 2px var(--state-critical); } }
