@@ -3,29 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>God View: Enterprise License Telemetry</title>
+    <title>God View: Topology & Redundancy Map</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="msd-container">
         <header class="system-header">
             <div class="header-metric">SYSTEM INTEGRITY: <span id="pulse-timer" class="neon-green">NOMINAL</span></div>
+            
+            <div class="header-metric filter-container">
+                <input type="text" id="asset-filter" placeholder="FILTER ASSET (e.g., MATLAB)" autocomplete="off">
+            </div>
+
             <div class="header-metric critical-text">GLOBAL DENIALS: <span id="denial-counter">0</span></div>
         </header>
 
         <div class="main-display">
             <aside class="infrastructure-sidebar" id="server-stack">
-                <div class="sidebar-title">INFRASTRUCTURE</div>
-                </aside>
+                <div class="sidebar-title">HOST NODES</div>
+            </aside>
 
-            <section class="core-matrix" id="hex-grid">
-                </section>
+            <section class="core-matrix" id="topology-grid">
+                
+                <div class="dc-lane" id="dc-1">
+                    <div class="dc-label">DC-1 (PRIMARY)</div>
+                    <div class="lane-grid" id="lane-grid-1"></div>
+                </div>
+                
+                <div class="dc-lane" id="dc-2">
+                    <div class="dc-label">DC-2 (SECONDARY)</div>
+                    <div class="lane-grid" id="lane-grid-2"></div>
+                </div>
+                
+                <div class="dc-lane" id="dc-3">
+                    <div class="dc-label">DC-3 (TERTIARY)</div>
+                    <div class="lane-grid" id="lane-grid-3"></div>
+                </div>
+
+            </section>
         </div>
 
         <footer class="budgetary-flow">
-            <div class="flow-title">REAL-TIME ORGANIZATIONAL ALLOCATION</div>
-            <div class="flow-bars" id="org-flows">
-                </div>
+            <div class="flow-title">ORGANIZATIONAL BUDGET ALLOCATION (OWNERSHIP HALO LEGEND)</div>
+            <div class="flow-bars" id="org-flows"></div>
         </footer>
     </div>
     <script src="app.js"></script>
