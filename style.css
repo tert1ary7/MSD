@@ -133,3 +133,9 @@ body {
     50% { text-shadow: 0 0 15px var(--state-critical); }
     100% { text-shadow: 0 0 2px var(--state-critical); }
 }
+
+/* This creates a visual 'neighborhood' for every 3 hexes */
+.hex-row .hex:nth-child(3n) {
+    border-right: 2px solid var(--state-org-blue);
+    margin-right: 10px; /* Creates a physical gap between triads */
+}
